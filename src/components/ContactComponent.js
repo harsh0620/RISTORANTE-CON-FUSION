@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 import { Link } from "react-router-dom";
 import {
   Breadcrumb,
@@ -8,7 +9,8 @@ import {
   Col,
   Label,
 } from "reactstrap";
-import { Control, Form, Errors, actions } from "react-redux-form";
+
+import { Control, Form, Errors } from "react-redux-form";
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || val.length <= len;
@@ -21,16 +23,42 @@ class Contact extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      firstname: "",
+      lastname: "",
+      telnum: "",
+      email: "",
+      agree: false,
+      contactType: "Tel.",
+      message: "",
+      touched: {
+        firstname: false,
+        lastname: false,
+        telnum: false,
+        email: false,
+      },
+    };
+
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value,
+    });
   }
 
   handleSubmit(values) {
     console.log("Current State is: " + JSON.stringify(values));
-    alert("Current State is: " + JSON.stringify(values));
-    this.props.resetFeedbackForm();
+    //alert('Current State is: ' + JSON.stringify(values));
+    this.props.resetFeedbackForm(values);
+    this.props.postFeedback(values);
     // event.preventDefault();
   }
-
   render() {
     return (
       <div className="container">
@@ -102,7 +130,6 @@ class Contact extends Component {
               model="feedback"
               onSubmit={(values) => this.handleSubmit(values)}
             >
-              {" "}
               <Row className="form-group">
                 <Label htmlFor="firstname" md={2}>
                   First Name

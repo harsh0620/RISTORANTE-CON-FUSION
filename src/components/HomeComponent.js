@@ -7,8 +7,11 @@ import {
   CardTitle,
   CardSubtitle,
 } from "reactstrap";
+
 import { Loading } from "./LoadingComponent";
+
 import { baseUrl } from "../shared/baseUrl";
+
 import { FadeTransform } from "react-animation-components";
 
 function RenderCard({ item, isLoading, errMess }) {
@@ -16,7 +19,7 @@ function RenderCard({ item, isLoading, errMess }) {
     return <Loading />;
   } else if (errMess) {
     return <h4>{errMess}</h4>;
-  } else {
+  } else if (item != null) {
     return (
       <FadeTransform
         in
@@ -36,7 +39,7 @@ function RenderCard({ item, isLoading, errMess }) {
         </Card>
       </FadeTransform>
     );
-  }
+  } else return <div></div>;
 }
 
 function Home(props) {
@@ -47,9 +50,10 @@ function Home(props) {
           <RenderCard
             item={props.dish}
             isLoading={props.dishesLoading}
-            errMess={props.dishesErrMess}
+            errMess={props.dishErrMess}
           />
         </div>
+
         <div className="col-12 col-md m-1">
           <RenderCard
             item={props.promotion}
@@ -58,7 +62,11 @@ function Home(props) {
           />
         </div>
         <div className="col-12 col-md m-1">
-          <RenderCard item={props.leader} />
+          <RenderCard
+            item={props.leaders}
+            isLoading={props.leaderLoading}
+            errMess={props.leaderErrMess}
+          />
         </div>
       </div>
     </div>
